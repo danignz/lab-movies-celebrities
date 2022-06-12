@@ -3,6 +3,15 @@ const router = require("express").Router();
 const Movie = require("../models/Movie.model");
 const Celebrity = require("../models/Celebrity.model");
 
+router.get("/", async (req, res, next) => {
+  try {
+    const movies = await Movie.find({});
+    res.render("movies/movies", { movies });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/create", async (req, res, next) => {
   try {
     const celebrities = await Celebrity.find({});
