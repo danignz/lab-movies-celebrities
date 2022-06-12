@@ -32,6 +32,16 @@ router.post("/create", async (req, res, next) => {
   }
 });
 
+router.post("/:movieId/delete", async (req, res, next) => {
+  const { movieId } = req.params;
+  try {
+    await Movie.findByIdAndRemove(movieId);
+    res.redirect("/movies");
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/:movieId", async (req, res, next) => {
   const { movieId } = req.params;
   try {
