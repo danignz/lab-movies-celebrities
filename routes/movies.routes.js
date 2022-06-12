@@ -22,7 +22,6 @@ router.get("/create", async (req, res, next) => {
 });
 
 router.post("/create", async (req, res, next) => {
-
   const { title, genre, plot, cast } = req.body;
   try {
     await Movie.create({ title, genre, plot, cast });
@@ -30,6 +29,16 @@ router.post("/create", async (req, res, next) => {
   } catch (error) {
     next(error);
     res.redirect("/movies/create");
+  }
+});
+
+router.get("/:movieId", async (req, res, next) => {
+  const { movieId } = req.params;
+  try {
+    const movie = await Movie.findById(movieId).populate("cast");
+    res.render("movies/movie-details", movie);
+  } catch (error) {
+    next(error);
   }
 });
 
