@@ -1,9 +1,15 @@
 <h2>List of movies</h2>
 
 <div>
-  {{#each movies}}
-    <div>
-      <p><a href="/movies/{{this._id}}">{{this.title}}</a></p>
-    </div>
-  {{/each}}
+  {{#if movies}}
+    {{#each movies}}
+      <div>
+        <p><a href="/movies/{{this._id}}">{{this.title}}</a></p>
+      </div>
+    {{/each}}
+  {{else}}
+    <p>Not movies avariable</p>
+  {{/if}}
 </div>
+
+<a class="homelink" href="/">Back Home Page</a>
