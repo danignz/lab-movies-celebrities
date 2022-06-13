@@ -42,6 +42,43 @@ router.post("/:movieId/delete", async (req, res, next) => {
   }
 });
 
+router.get("/:movieId/edit", async (req, res, next) => {
+  const { movieId } = req.params;
+  try {
+    const movie = await Movie.findById(movieId);
+    const celebrities = await Celebrity.find({}).lean();
+
+    celebrities.forEach((celebrity) => {
+      movie.cast.forEach((cel) => {
+        if (cel.toString() === celebrity._id.toString()) {
+          celebrity.worksInMovie = true;
+        }
+      });
+    });
+
+    res.render("movies/edit-movie", { movie, celebrities });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/:movieId", async (req, res, next) => {
+  const { movieId } = req.params;
+  const { title, genre, plot, cast } = req.body;
+
+  try {
+    const updatedMovie = await Movie.findByIdAndUpdate(
+      movieId,
+      { title, genre, plot, cast },
+      { new: true }
+    );
+    console.log("Just updated:", updatedMovie);
+    res.redirect(`/movies/${movieId}`);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/:movieId", async (req, res, next) => {
   const { movieId } = req.params;
   try {
